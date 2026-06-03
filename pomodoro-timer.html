@@ -1,0 +1,1827 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🍅 番茄钟 - Pomodoro Timer</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍅</text></svg>">
+<style>
+/* ══════════════════════════════════
+   THEME SYSTEM
+   ══════════════════════════════════ */
+:root {
+  --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --radius-lg: 24px;
+  --transition: 0.25s;
+}
+
+/* ── Dark Theme (default) ── */
+[data-theme="dark"] {
+  --bg: #1a1b2e;
+  --bg-alt: #151628;
+  --surface: #252640;
+  --surface-hover: #2e2f4a;
+  --primary: #ff6b6b;
+  --primary-light: #ff8e8e;
+  --primary-glow: rgba(255,107,107,0.35);
+  --work: #ff6b6b;
+  --break: #4ecdc4;
+  --long-break: #45b7d1;
+  --text: #e8e8f0;
+  --text-secondary: #a0a0b8;
+  --text-muted: #6a6a80;
+  --ring-bg: #2a2b45;
+  --border: rgba(255,255,255,0.06);
+  --nav-bg: #1e1f35;
+  --input-bg: #1a1b2e;
+  --input-border: rgba(255,255,255,0.1);
+  --danger: #ef5350;
+  --success: #4caf50;
+  --shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+/* ── Light Theme ── */
+[data-theme="light"] {
+  --bg: #f0f2f5;
+  --bg-alt: #e4e6e9;
+  --surface: #ffffff;
+  --surface-hover: #f5f6f8;
+  --primary: #e74c3c;
+  --primary-light: #ff6b6b;
+  --primary-glow: rgba(231,76,60,0.3);
+  --work: #e74c3c;
+  --break: #27ae60;
+  --long-break: #2980b9;
+  --text: #2c3e50;
+  --text-secondary: #7f8c8d;
+  --text-muted: #bdc3c7;
+  --ring-bg: #ecf0f1;
+  --border: rgba(0,0,0,0.08);
+  --nav-bg: #ffffff;
+  --input-bg: #f0f2f5;
+  --input-border: rgba(0,0,0,0.12);
+  --danger: #e74c3c;
+  --success: #27ae60;
+  --shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
+
+/* ── Forest Theme ── */
+[data-theme="forest"] {
+  --bg: #1a2b1a;
+  --bg-alt: #152415;
+  --surface: #243324;
+  --surface-hover: #2d3f2d;
+  --primary: #4caf50;
+  --primary-light: #66bb6a;
+  --primary-glow: rgba(76,175,80,0.35);
+  --work: #4caf50;
+  --break: #8bc34a;
+  --long-break: #009688;
+  --text: #e0ece0;
+  --text-secondary: #a0c0a0;
+  --text-muted: #6a8a6a;
+  --ring-bg: #2a452a;
+  --border: rgba(255,255,255,0.06);
+  --nav-bg: #1e351e;
+  --input-bg: #1a2b1a;
+  --input-border: rgba(255,255,255,0.1);
+  --danger: #ef5350;
+  --success: #66bb6a;
+  --shadow: 0 8px 32px rgba(0,0,0,0.3);
+
+}
+
+/* ── Ocean Theme ── */
+[data-theme="ocean"] {
+  --bg: #1a1e2e;
+  --bg-alt: #151828;
+  --surface: #1e2a40;
+  --surface-hover: #263250;
+  --primary: #42a5f5;
+  --primary-light: #64b5f6;
+  --primary-glow: rgba(66,165,245,0.35);
+  --work: #42a5f5;
+  --break: #26c6da;
+  --long-break: #5c6bc0;
+  --text: #e0ecf8;
+  --text-secondary: #a0c0e0;
+  --text-muted: #6a80a8;
+  --ring-bg: #223050;
+  --border: rgba(255,255,255,0.06);
+  --nav-bg: #1a2240;
+  --input-bg: #1a1e2e;
+  --input-border: rgba(255,255,255,0.1);
+  --danger: #ef5350;
+  --success: #66bb6a;
+  --shadow: 0 8px 32px rgba(0,0,0,0.3);
+
+}
+
+/* ── Sunset Theme ── */
+[data-theme="sunset"] {
+  --bg: #2e1b1e;
+  --bg-alt: #241518;
+  --surface: #402520;
+  --surface-hover: #4d2d28;
+  --primary: #ff7043;
+  --primary-light: #ff8a65;
+  --primary-glow: rgba(255,112,67,0.35);
+  --work: #ff7043;
+  --break: #ffa726;
+  --long-break: #ab47bc;
+  --text: #f5e8e8;
+  --text-secondary: #c8a8a8;
+  --text-muted: #8a6a6a;
+  --ring-bg: #453025;
+  --border: rgba(255,255,255,0.06);
+  --nav-bg: #351e20;
+  --input-bg: #2e1b1e;
+  --input-border: rgba(255,255,255,0.1);
+  --danger: #ef5350;
+  --success: #ffa726;
+  --shadow: 0 8px 32px rgba(0,0,0,0.3);
+
+}
+
+/* ══════════════════════════════════
+   BASE STYLES
+   ══════════════════════════════════ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: background var(--transition), color var(--transition);
+}
+
+.app-container {
+  width: 460px;
+  max-width: 95vw;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: background var(--transition), box-shadow var(--transition);
+}
+
+/* ══════════════════════════════════
+   NAVIGATION
+   ══════════════════════════════════ */
+.app-nav {
+  display: flex;
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--border);
+  transition: background var(--transition);
+}
+.nav-item {
+  flex: 1;
+  padding: 14px 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font);
+  transition: color var(--transition), background var(--transition);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.nav-item:hover { color: var(--text); }
+.nav-item.active {
+  color: var(--primary);
+  font-weight: 600;
+}
+.nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 20%;
+  right: 20%;
+  height: 3px;
+  background: var(--primary);
+  border-radius: 3px 3px 0 0;
+}
+.nav-icon { font-size: 16px; }
+.nav-badge {
+  background: var(--primary);
+  color: #fff;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-weight: 700;
+  min-width: 18px;
+  text-align: center;
+  line-height: 1;
+}
+
+/* ══════════════════════════════════
+   PAGES
+   ══════════════════════════════════ */
+.app-page {
+  display: none;
+  padding: 32px 28px 28px;
+  min-height: 440px;
+}
+.app-page.active { display: block; }
+
+/* ══════════════════════════════════
+   TIMER PAGE
+   ══════════════════════════════════ */
+/* Mode tabs */
+.mode-tabs {
+  display: flex;
+  gap: 6px;
+  background: var(--bg);
+  border-radius: var(--radius);
+  padding: 5px;
+  margin-bottom: 28px;
+  transition: background var(--transition);
+}
+.mode-tab {
+  flex: 1;
+  padding: 10px 6px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font);
+  transition: color var(--transition), background var(--transition), border-color var(--transition);
+}
+.mode-tab.active {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 4px 12px var(--primary-glow);
+}
+.mode-tab:hover:not(.active) {
+  color: var(--text);
+  background: rgba(128,128,128,0.1);
+}
+
+/* Active task indicator */
+.active-task-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  min-height: 20px;
+  transition: color var(--transition);
+}
+.active-task-indicator.has-task {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+/* Timer ring */
+.timer-ring-wrapper {
+  position: relative;
+  width: 250px;
+  height: 250px;
+  margin: 0 auto 24px;
+}
+.timer-ring {
+  transform: rotate(-90deg);
+  width: 250px;
+  height: 250px;
+}
+.ring-bg {
+  fill: none;
+  stroke: var(--ring-bg);
+  stroke-width: 8;
+  transition: stroke var(--transition);
+}
+.ring-progress {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear, stroke var(--transition);
+  stroke-dasharray: 722.57;
+  stroke-dashoffset: 0;
+}
+.ring-progress.paused { transition: none; }
+.ring-progress.break-mode { stroke: var(--break); }
+.ring-progress.long-break-mode { stroke: var(--long-break); }
+
+.timer-display {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.timer-time {
+  font-size: 52px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  font-family: var(--font-mono);
+  line-height: 1;
+  transition: color var(--transition);
+}
+.timer-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: color var(--transition);
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.btn {
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  font-family: var(--font);
+}
+.btn:active { transform: scale(0.92); }
+
+.btn-play {
+  width: 60px; height: 60px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 24px;
+  box-shadow: 0 6px 20px var(--primary-glow);
+  transition: all 0.2s;
+}
+.btn-play:hover {
+  background: var(--primary-light);
+  box-shadow: 0 8px 28px var(--primary-glow);
+  transform: translateY(-2px);
+}
+.btn-play:active { transform: translateY(0) scale(0.94); }
+.btn-play.running {
+  background: var(--break);
+  box-shadow: 0 6px 20px rgba(78,205,196,0.4);
+}
+
+.btn-small {
+  width: 42px; height: 42px;
+  background: var(--ring-bg);
+  color: var(--text-secondary);
+  font-size: 17px;
+  transition: all var(--transition);
+}
+.btn-small:hover { background: var(--surface-hover); color: var(--text); }
+
+/* Mini stats on timer page */
+.mini-stats {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  transition: border-color var(--transition);
+}
+.mini-stat { text-align: center; }
+.mini-stat-value { font-size: 20px; font-weight: 700; color: var(--primary); }
+.mini-stat-label { font-size: 10px; color: var(--text-secondary); margin-top: 1px; text-transform: uppercase; letter-spacing: 1px; }
+
+/* ══════════════════════════════════
+   TASKS PAGE
+   ══════════════════════════════════ */
+#page-tasks { padding: 24px 28px 28px; }
+
+.task-input-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.task-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-sm);
+  background: var(--input-bg);
+  color: var(--text);
+  font-size: 14px;
+  font-family: var(--font);
+  outline: none;
+  transition: all var(--transition);
+}
+.task-input:focus { border-color: var(--primary); }
+.task-input::placeholder { color: var(--text-muted); }
+
+.btn-add {
+  padding: 10px 18px;
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--font);
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+.btn-add:hover { background: var(--primary-light); }
+
+.task-list { list-style: none; max-height: 310px; overflow-y: auto; }
+.task-list::-webkit-scrollbar { width: 4px; }
+.task-list::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 2px; }
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 6px;
+  transition: color var(--transition), background var(--transition), border-color var(--transition);
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.task-item:hover { background: var(--bg-alt); }
+.task-item.active-task {
+  border-color: var(--primary);
+  background: var(--bg-alt);
+}
+
+.task-checkbox {
+  width: 20px; height: 20px;
+  border: 2px solid var(--text-muted);
+  border-radius: 50%;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+  font-size: 11px;
+  color: transparent;
+}
+.task-checkbox:hover { border-color: var(--primary); }
+.task-item.done .task-checkbox {
+  background: var(--success);
+  border-color: var(--success);
+  color: #fff;
+}
+.task-item.done .task-title {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.task-title { flex: 1; font-size: 14px; transition: color var(--transition); }
+.task-pomos {
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: var(--ring-bg);
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: all var(--transition);
+}
+.task-item.active-task .task-pomos { background: var(--primary); color: #fff; }
+
+.task-delete {
+  width: 26px; height: 26px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+  flex-shrink: 0;
+}
+.task-delete:hover { background: var(--danger); color: #fff; }
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+}
+.empty-state-icon { font-size: 40px; margin-bottom: 12px; }
+.empty-state-text { font-size: 14px; line-height: 1.6; }
+
+/* ══════════════════════════════════
+   STATS PAGE
+   ══════════════════════════════════ */
+#page-stats { padding: 24px 28px 28px; }
+
+.stats-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+.stats-header h3 { font-size: 15px; font-weight: 600; }
+.stats-toggle {
+  display: flex;
+  gap: 2px;
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 3px;
+}
+.stats-toggle-btn {
+  padding: 6px 14px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: var(--font);
+  transition: all var(--transition);
+}
+.stats-toggle-btn.active {
+  background: var(--primary);
+  color: #fff;
+}
+
+.chart-container {
+  background: var(--bg);
+  border-radius: var(--radius);
+  padding: 20px 16px 12px;
+  margin-bottom: 18px;
+  transition: background var(--transition);
+}
+.chart-svg { width: 100%; height: 180px; display: block; }
+.chart-bar { transition: all 0.3s; }
+.chart-bar:hover { opacity: 0.8; }
+.chart-bar.today { opacity: 1; }
+
+.summary-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.summary-card {
+  background: var(--bg);
+  border-radius: var(--radius);
+  padding: 16px;
+  text-align: center;
+  transition: background var(--transition);
+}
+.summary-card-value {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--primary);
+  font-family: var(--font-mono);
+}
+.summary-card-label { font-size: 11px; color: var(--text-secondary); margin-top: 2px; text-transform: uppercase; letter-spacing: 1px; }
+.summary-card-sub { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+/* ══════════════════════════════════
+   SETTINGS PAGE
+   ══════════════════════════════════ */
+#page-settings { padding: 24px 28px 28px; }
+
+.settings-section { margin-bottom: 24px; }
+.settings-section:last-child { margin-bottom: 0; }
+.settings-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.setting-row:last-child { margin-bottom: 0; }
+.setting-label { font-size: 13px; color: var(--text-secondary); transition: color var(--transition); }
+.setting-input {
+  width: 60px;
+  padding: 6px 8px;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--text);
+  font-size: 13px;
+  text-align: center;
+  font-family: var(--font);
+  outline: none;
+  transition: all var(--transition);
+}
+.setting-input:focus { border-color: var(--primary); }
+
+/* Theme picker */
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+.theme-option {
+  aspect-ratio: 1;
+  border-radius: var(--radius-sm);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--font);
+}
+.theme-option:hover { transform: scale(1.05); }
+.theme-option.active { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
+.theme-option.active::after {
+  content: '✓';
+  position: absolute;
+  top: -6px; right: -6px;
+  width: 18px; height: 18px;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.theme-dark { background: #1a1b2e; color: #ff6b6b; }
+.theme-light { background: #f0f2f5; color: #e74c3c; }
+.theme-forest { background: #1a2b1a; color: #4caf50; }
+.theme-ocean { background: #1a1e2e; color: #42a5f5; }
+.theme-sunset { background: #2e1b1e; color: #ff7043; }
+
+/* Sound picker */
+.sound-options { display: flex; gap: 8px; flex-wrap: wrap; }
+.sound-option {
+  padding: 8px 14px;
+  border: 1px solid var(--input-border);
+  border-radius: 20px;
+  background: var(--input-bg);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 12px;
+  font-family: var(--font);
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+.sound-option:hover { border-color: var(--primary); color: var(--text); }
+.sound-option.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+/* Custom color */
+.color-picker-row { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+.color-input {
+  -webkit-appearance: none;
+  width: 36px; height: 36px;
+  border: 2px solid var(--input-border);
+  border-radius: 50%;
+  cursor: pointer;
+  background: transparent;
+  padding: 2px;
+}
+.color-input::-webkit-color-swatch-wrapper { padding: 0; }
+.color-input::-webkit-color-swatch { border-radius: 50%; border: none; }
+.btn-reset-color {
+  padding: 6px 12px;
+  border: 1px solid var(--input-border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 11px;
+  font-family: var(--font);
+  transition: all var(--transition);
+}
+.btn-reset-color:hover { border-color: var(--danger); color: var(--danger); }
+
+/* Danger zone */
+.btn-danger {
+  padding: 8px 16px;
+  border: 1px solid var(--danger);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--danger);
+  cursor: pointer;
+  font-size: 12px;
+  font-family: var(--font);
+  transition: all var(--transition);
+}
+.btn-danger:hover { background: var(--danger); color: #fff; }
+
+/* ══════════════════════════════════
+   TOAST
+   ══════════════════════════════════ */
+.toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-120px);
+  background: var(--primary);
+  color: #fff;
+  padding: 12px 28px;
+  border-radius: 40px;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: 0 8px 24px var(--primary-glow);
+  transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 100;
+  pointer-events: none;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast.break-toast {
+  background: var(--break);
+  box-shadow: 0 8px 24px rgba(78,205,196,0.4);
+}
+
+/* ══════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════ */
+@media (max-width: 440px) {
+  .app-page { padding: 24px 16px 20px; }
+  #page-tasks, #page-stats, #page-settings { padding: 20px 16px 20px; }
+  .timer-ring-wrapper, .timer-ring { width: 210px; height: 210px; }
+  .timer-time { font-size: 42px; }
+  .mode-tab, .nav-item { font-size: 11px; padding: 8px 4px; }
+  .theme-grid { grid-template-columns: repeat(5, 1fr); gap: 5px; }
+  .summary-cards { grid-template-columns: 1fr 1fr; }
+  .sound-options { gap: 5px; }
+  .sound-option { padding: 6px 10px; font-size: 11px; }
+  .task-list { max-height: 240px; }
+}
+</style>
+</head>
+<body>
+
+<div class="app-container">
+  <!-- ── Navigation ── -->
+  <nav class="app-nav">
+    <button class="nav-item active" data-page="timer">
+      <span class="nav-icon">🍅</span> 计时
+    </button>
+    <button class="nav-item" data-page="tasks">
+      <span class="nav-icon">📋</span> 任务
+      <span class="nav-badge" id="navTaskCount" style="display:none">0</span>
+    </button>
+    <button class="nav-item" data-page="stats">
+      <span class="nav-icon">📊</span> 统计
+    </button>
+    <button class="nav-item" data-page="settings">
+      <span class="nav-icon">⚙</span> 设置
+    </button>
+  </nav>
+
+  <!-- ═══════════════════════════════
+    TIMER PAGE
+    ═══════════════════════════════ -->
+  <div class="app-page active" id="page-timer">
+    <div class="mode-tabs">
+      <button class="mode-tab active" data-mode="work">🍅 专注</button>
+      <button class="mode-tab" data-mode="break">☕ 短休</button>
+      <button class="mode-tab" data-mode="long-break">🌴 长休</button>
+    </div>
+
+    <div class="active-task-indicator" id="activeTaskIndicator"></div>
+
+    <div class="timer-ring-wrapper">
+      <svg class="timer-ring" viewBox="0 0 250 250">
+        <circle class="ring-bg" cx="125" cy="125" r="115"/>
+        <circle class="ring-progress" id="ringProgress" cx="125" cy="125" r="115"/>
+      </svg>
+      <div class="timer-display">
+        <div class="timer-time" id="timerDisplay">25:00</div>
+        <div class="timer-label" id="timerLabel">专注</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-small" id="btnReset" title="重置 (R)">↺</button>
+      <button class="btn btn-play" id="btnPlay" title="开始/暂停 (Space)">▶</button>
+      <button class="btn btn-small" id="btnSkip" title="跳过 (→)">⏭</button>
+    </div>
+
+    <div class="mini-stats">
+      <div class="mini-stat">
+        <div class="mini-stat-value" id="todayCount">0</div>
+        <div class="mini-stat-label">今日</div>
+      </div>
+      <div class="mini-stat">
+        <div class="mini-stat-value" id="totalCount">0</div>
+        <div class="mini-stat-label">总计</div>
+      </div>
+      <div class="mini-stat">
+        <div class="mini-stat-value" id="streakCount">0</div>
+        <div class="mini-stat-label">连续天数</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+    TASKS PAGE
+    ═══════════════════════════════ -->
+  <div class="app-page" id="page-tasks">
+    <div class="task-input-row">
+      <input class="task-input" id="taskInput" placeholder="添加新任务..." maxlength="80">
+      <button class="btn-add" id="btnAddTask">＋ 添加</button>
+    </div>
+    <ul class="task-list" id="taskList"></ul>
+    <div class="empty-state" id="taskEmptyState">
+      <div class="empty-state-icon">📝</div>
+      <div class="empty-state-text">还没有任务<br>添加任务并将番茄钟与任务关联</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+    STATS PAGE
+    ═══════════════════════════════ -->
+  <div class="app-page" id="page-stats">
+    <div class="stats-header">
+      <h3>专注记录</h3>
+      <div class="stats-toggle">
+        <button class="stats-toggle-btn active" data-range="7">7天</button>
+        <button class="stats-toggle-btn" data-range="30">30天</button>
+      </div>
+    </div>
+    <div class="chart-container">
+      <svg class="chart-svg" id="chartSvg" viewBox="0 0 380 180"></svg>
+    </div>
+    <div class="summary-cards">
+      <div class="summary-card">
+        <div class="summary-card-value" id="statTotalFocus">0h</div>
+        <div class="summary-card-label">总专注时长</div>
+        <div class="summary-card-sub" id="statAvgDaily">日均 0h</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-card-value" id="statBestDay">--</div>
+        <div class="summary-card-label">最佳记录</div>
+        <div class="summary-card-sub" id="statBestCount">0 个番茄</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-card-value" id="statStreak">0</div>
+        <div class="summary-card-label">连续天数</div>
+        <div class="summary-card-sub" id="statWeekTotal">本周 0 个</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-card-value" id="statCompletion">0%</div>
+        <div class="summary-card-label">任务完成率</div>
+        <div class="summary-card-sub" id="statTaskInfo">0/0 任务</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════
+    SETTINGS PAGE
+    ═══════════════════════════════ -->
+  <div class="app-page" id="page-settings">
+    <!-- Timer Settings -->
+    <div class="settings-section">
+      <div class="settings-section-title">⏱ 计时设置</div>
+      <div class="setting-row">
+        <span class="setting-label">专注时长 (分钟)</span>
+        <input class="setting-input" type="number" id="workDuration" data-setting="workDuration" value="25" min="1" max="120">
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">短休时长 (分钟)</span>
+        <input class="setting-input" type="number" id="breakDuration" data-setting="breakDuration" value="5" min="1" max="30">
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">长休时长 (分钟)</span>
+        <input class="setting-input" type="number" id="longBreakDuration" data-setting="longBreakDuration" value="15" min="1" max="60">
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">长休间隔 (番茄数)</span>
+        <input class="setting-input" type="number" id="longBreakInterval" data-setting="longBreakInterval" value="4" min="2" max="10">
+      </div>
+    </div>
+
+    <!-- Theme Settings -->
+    <div class="settings-section">
+      <div class="settings-section-title">🎨 主题</div>
+      <div class="theme-grid" id="themeGrid">
+        <button class="theme-option theme-dark active" data-theme="dark">黑</button>
+        <button class="theme-option theme-light" data-theme="light">白</button>
+        <button class="theme-option theme-forest" data-theme="forest">森</button>
+        <button class="theme-option theme-ocean" data-theme="ocean">海</button>
+        <button class="theme-option theme-sunset" data-theme="sunset">霞</button>
+      </div>
+      <div class="color-picker-row">
+        <span class="setting-label">自定义强调色</span>
+        <input class="color-input" type="color" id="customColor" value="#ff6b6b">
+        <button class="btn-reset-color" id="btnResetColor">恢复默认</button>
+      </div>
+    </div>
+
+    <!-- Sound Settings -->
+    <div class="settings-section">
+      <div class="settings-section-title">🔔 提示音</div>
+      <div class="sound-options" id="soundOptions">
+        <button class="sound-option active" data-sound="chime">🔔 编钟</button>
+        <button class="sound-option" data-sound="bell">🛎 铃声</button>
+        <button class="sound-option" data-sound="digital">📟 电子</button>
+        <button class="sound-option" data-sound="gentle">🎵 轻柔</button>
+        <button class="sound-option" data-sound="none">🔇 静音</button>
+      </div>
+    </div>
+
+    <!-- Data Management -->
+    <div class="settings-section">
+      <div class="settings-section-title">💾 数据管理</div>
+      <button class="btn-danger" id="btnClearData">🗑 清除所有数据</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Toast ── -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   POMODORO TIMER - Complete Application
+   ═══════════════════════════════════════════════ */
+
+// ── Constants ──
+const STORAGE_PREFIX = 'pomodoro_';
+const STORAGE_SETTINGS = STORAGE_PREFIX + 'settings';
+const STORAGE_TASKS = STORAGE_PREFIX + 'tasks';
+const STORAGE_STATS = STORAGE_PREFIX + 'stats';
+const STORAGE_ACTIVE_TASK = STORAGE_PREFIX + 'active_task';
+const RING_CIRCUMFERENCE = 2 * Math.PI * 115; // ≈722.57
+const DAY_NAMES = ['日', '一', '二', '三', '四', '五', '六'];
+const HISTORY_RETENTION_DAYS = 365;
+
+// ── DOM helpers ──
+const $id = id => document.getElementById(id);
+const $qsa = (sel, root) => (root || document).querySelectorAll(sel);
+
+// ── Cached DOM refs (immutable elements) ──
+const els = {
+  ring: $id('ringProgress'),
+  timerDisplay: $id('timerDisplay'),
+  timerLabel: $id('timerLabel'),
+  btnPlay: $id('btnPlay'),
+  toast: $id('toast'),
+  activeTask: $id('activeTaskIndicator'),
+  todayCount: $id('todayCount'),
+  totalCount: $id('totalCount'),
+  streakCount: $id('streakCount'),
+  taskList: $id('taskList'),
+  taskEmpty: $id('taskEmptyState'),
+  taskInput: $id('taskInput'),
+  taskBadge: $id('navTaskCount'),
+  chartSvg: $id('chartSvg'),
+  customColor: $id('customColor'),
+  statsTotalFocus: $id('statTotalFocus'),
+  statsAvgDaily: $id('statAvgDaily'),
+  statsBestDay: $id('statBestDay'),
+  statsBestCount: $id('statBestCount'),
+  statsStreak: $id('statStreak'),
+  statsWeekTotal: $id('statWeekTotal'),
+  statsCompletion: $id('statCompletion'),
+  statsTaskInfo: $id('statTaskInfo'),
+};
+
+const DEFAULT_SETTINGS = {
+  workDuration: 25,
+  breakDuration: 5,
+  longBreakDuration: 15,
+  longBreakInterval: 4,
+  theme: 'dark',
+  sound: 'chime',
+  customColor: null,
+};
+
+const MODE_LABELS = { work: '专注', break: '短休', 'long-break': '长休' };
+const MODE_LABELS_RUNNING = { work: '专注中...', break: '休息中...', 'long-break': '长休中...' };
+
+// ── Audio System ──
+let audioCtx = null;
+
+function getAudioContext() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+  return audioCtx;
+}
+
+function playTone(freq, duration, delay = 0, type = 'sine', vol = 0.3) {
+  try {
+    const ctx = getAudioContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(vol, ctx.currentTime + delay);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + duration);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(ctx.currentTime + delay);
+    osc.stop(ctx.currentTime + delay + duration);
+  } catch (e) { /* audio not available */ }
+}
+
+const SOUND_PATTERNS = {
+  chime: () => {
+    [523, 659, 784, 1047].forEach((f, i) => playTone(f, 0.3, i * 0.18));
+    setTimeout(() => {
+      [523, 659, 784, 1047].forEach((f, i) => playTone(f, 0.3, i * 0.18));
+    }, 800);
+  },
+  bell: () => {
+    playTone(880, 0.6, 0, 'sine', 0.25);
+    playTone(1100, 0.4, 0.08, 'sine', 0.15);
+    setTimeout(() => playTone(880, 0.6, 0, 'sine', 0.25), 700);
+  },
+  digital: () => {
+    [800, 1000, 800, 1000].forEach((f, i) => playTone(f, 0.12, i * 0.15, 'square', 0.15));
+    setTimeout(() => {
+      [800, 1000, 800, 1000].forEach((f, i) => playTone(f, 0.12, i * 0.15, 'square', 0.15));
+    }, 700);
+  },
+  gentle: () => {
+    [392, 494, 587, 784].forEach((f, i) => playTone(f, 0.5, i * 0.25, 'triangle', 0.2));
+  },
+  none: () => {},
+};
+
+function playAlarm() {
+  const sound = settings.sound || 'chime';
+  (SOUND_PATTERNS[sound] || SOUND_PATTERNS.chime)();
+}
+
+function playClick() {
+  playTone(800, 0.06, 0, 'sine', 0.12);
+}
+
+// ── Toast ──
+let toastTimer = null;
+function showToast(msg, isBreak = false) {
+  els.toast.textContent = msg;
+  els.toast.className = 'toast' + (isBreak ? ' break-toast' : '');
+  clearTimeout(toastTimer);
+  requestAnimationFrame(() => { els.toast.classList.add('show'); });
+  toastTimer = setTimeout(() => { els.toast.classList.remove('show'); }, 2500);
+}
+
+// ── Notification ──
+function sendNotification(title, body) {
+  if (Notification.permission === 'granted') {
+    new Notification(title, { body, icon: '🍅', silent: false, tag: 'pomodoro' });
+  } else if (Notification.permission === 'default') {
+    Notification.requestPermission().then(p => {
+      if (p === 'granted') new Notification(title, { body, icon: '🍅', tag: 'pomodoro' });
+    });
+  }
+}
+
+// Page visibility — notify when timer completes while tab is hidden
+let pendingNotification = null;
+
+function showOrNotify(msg, isBreak) {
+  if (document.hidden) {
+    pendingNotification = { msg, isBreak };
+  } else {
+    showToast(msg, isBreak);
+  }
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && pendingNotification) {
+    showToast(pendingNotification.msg, pendingNotification.isBreak);
+    pendingNotification = null;
+  }
+});
+
+// ── Data Management ──
+function safeGet(key, fallback) {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch { return fallback; }
+}
+
+function safeSet(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
+}
+
+// ── Settings ──
+let settings = { ...DEFAULT_SETTINGS, ...safeGet(STORAGE_SETTINGS, {}) };
+function saveSettings() { safeSet(STORAGE_SETTINGS, settings); }
+
+// ── Tasks ──
+let tasks = safeGet(STORAGE_TASKS, []);
+let activeTaskId = safeGet(STORAGE_ACTIVE_TASK, null);
+function saveTasks() { safeSet(STORAGE_TASKS, tasks); }
+function saveActiveTask() { safeSet(STORAGE_ACTIVE_TASK, activeTaskId); }
+
+function getActiveTask() {
+  return tasks.find(t => t.id === activeTaskId) || null;
+}
+
+function generateId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+
+// ── Stats ──
+let _statsCache = null;
+
+function getStats() {
+  if (_statsCache) return _statsCache;
+  _statsCache = safeGet(STORAGE_STATS, { total: 0, streak: 0, lastDate: null, history: {} });
+  return _statsCache;
+}
+
+function saveStats(stats) {
+  // Prune old history entries (keep only HISTORY_RETENTION_DAYS)
+  const cutoff = getDateDaysAgo(HISTORY_RETENTION_DAYS);
+  for (const date of Object.keys(stats.history)) {
+    if (date < cutoff) delete stats.history[date];
+  }
+  _statsCache = null;
+  safeSet(STORAGE_STATS, stats);
+}
+
+function getToday() { return new Date().toISOString().slice(0, 10); }
+
+function getDateDaysAgo(n) {
+  const d = new Date();
+  d.setDate(d.getDate() - n);
+  return d.toISOString().slice(0, 10);
+}
+
+// ── Timer State ──
+let currentMode = 'work';
+let timeLeft = settings.workDuration * 60;
+let isRunning = false;
+let timerInterval = null;
+let completedPomodoros = 0;
+let currentPage = 'timer';
+
+// ── Navigation ──
+function navigateTo(page) {
+  playClick();
+  currentPage = page;
+  $qsa('.app-page').forEach(p => p.classList.remove('active'));
+  $qsa('.nav-item').forEach(n => n.classList.remove('active'));
+
+  const pageEl = $id('page-' + page);
+  const navEl = document.querySelector(`.nav-item[data-page="${page}"]`);
+  if (pageEl) pageEl.classList.add('active');
+  if (navEl) navEl.classList.add('active');
+
+  if (page === 'tasks') renderTasks();
+  if (page === 'stats') renderStats();
+  if (page === 'settings') syncSettingsToInputs();
+}
+
+$qsa('.nav-item').forEach(item => {
+  item.addEventListener('click', () => navigateTo(item.dataset.page));
+});
+
+// ── Task Management ──
+function addTask(title) {
+  const task = {
+    id: generateId(),
+    title: title.trim(),
+    done: false,
+    pomodoros: 0,
+    createdAt: getToday(),
+  };
+  tasks.unshift(task);
+  saveTasks();
+  renderTasks();
+  updateTaskBadge();
+}
+
+function removeTask(id) {
+  tasks = tasks.filter(t => t.id !== id);
+  if (activeTaskId === id) {
+    activeTaskId = null;
+    saveActiveTask();
+    updateActiveTaskIndicator();
+  }
+  saveTasks();
+  renderTasks();
+  updateTaskBadge();
+}
+
+function toggleTask(id) {
+  const task = tasks.find(t => t.id === id);
+  if (task) {
+    task.done = !task.done;
+    saveTasks();
+    renderTasks();
+    updateTaskBadge();
+  }
+}
+
+function selectTask(id) {
+  if (activeTaskId === id) {
+    activeTaskId = null;
+  } else {
+    const task = tasks.find(t => t.id === id);
+    if (task && !task.done) {
+      activeTaskId = id;
+    }
+  }
+  saveActiveTask();
+  updateActiveTaskIndicator();
+  renderTasks();
+}
+
+function incrementTaskPomodoro(id) {
+  const task = tasks.find(t => t.id === id);
+  if (task) {
+    task.pomodoros++;
+    saveTasks();
+    renderTasks();
+    updateTaskBadge();
+  }
+}
+
+function updateActiveTaskIndicator() {
+  const task = getActiveTask();
+  if (task) {
+    els.activeTask.textContent = '🎯 ' + task.title;
+    els.activeTask.className = 'active-task-indicator has-task';
+  } else {
+    els.activeTask.textContent = '未选择任务';
+    els.activeTask.className = 'active-task-indicator';
+  }
+}
+
+function updateTaskBadge() {
+  const active = tasks.filter(t => !t.done).length;
+  if (active > 0) {
+    els.taskBadge.textContent = active;
+    els.taskBadge.style.display = '';
+  } else {
+    els.taskBadge.style.display = 'none';
+  }
+}
+
+// ── Single event delegation on task list (bound once) ──
+els.taskList.addEventListener('click', (e) => {
+  const target = e.target.closest('[data-action]');
+  if (!target) return;
+  const { action, id } = target.dataset;
+  if (action === 'toggle') { e.stopPropagation(); toggleTask(id); }
+  else if (action === 'select') { selectTask(id); }
+  else if (action === 'delete') {
+    e.stopPropagation();
+    if (confirm('确定删除这个任务吗？')) removeTask(id);
+  }
+});
+
+function renderTasks() {
+  if (tasks.length === 0) {
+    els.taskList.innerHTML = '';
+    els.taskEmpty.style.display = 'block';
+    return;
+  }
+
+  els.taskEmpty.style.display = 'none';
+  els.taskList.innerHTML = tasks.map(t => `
+    <li class="task-item${t.done ? ' done' : ''}${t.id === activeTaskId ? ' active-task' : ''}">
+      <div class="task-checkbox" data-action="toggle" data-id="${t.id}">${t.done ? '✓' : ''}</div>
+      <span class="task-title" data-action="select" data-id="${t.id}">${escapeHtml(t.title)}</span>
+      <span class="task-pomos">🍅×${t.pomodoros}</span>
+      <button class="task-delete" data-action="delete" data-id="${t.id}" title="删除">×</button>
+    </li>
+  `).join('');
+}
+
+const _escapeDiv = document.createElement('div');
+function escapeHtml(str) {
+  _escapeDiv.textContent = str;
+  return _escapeDiv.innerHTML;
+}
+
+// ── Statistics & Chart ──
+let statsRange = 7;
+
+function renderStats() {
+  renderChart();
+  renderSummaryCards();
+}
+
+function renderChart() {
+  const stats = getStats();
+  const days = statsRange;
+
+  // Build day labels and values
+  const data = [];
+  for (let i = days - 1; i >= 0; i--) {
+    const date = getDateDaysAgo(i);
+    const d = new Date(date);
+    data.push({
+      label: days <= 7 ? DAY_NAMES[d.getDay()] : String(d.getMonth() + 1 + '/' + d.getDate()),
+      value: stats.history[date] || 0,
+      isToday: date === getToday(),
+      date: date,
+    });
+  }
+
+  // If 30 days, aggregate by groups of ~3 days for display
+  let displayData = data;
+  if (days > 7) {
+    displayData = [];
+    const groupSize = Math.ceil(data.length / 10);
+    for (let i = 0; i < data.length; i += groupSize) {
+      const group = data.slice(i, i + groupSize);
+      displayData.push({
+        label: group[0].label,
+        value: group.reduce((s, d) => s + d.value, 0),
+        isToday: group.some(d => d.isToday),
+        date: group.map(d => d.date).join(','),
+      });
+    }
+  }
+
+  let maxVal = 1;
+  for (const d of displayData) { if (d.value > maxVal) maxVal = d.value; }
+  const padding = { top: 25, bottom: 30, left: 30, right: 15 };
+  const chartW = 380 - padding.left - padding.right;
+  const chartH = 180 - padding.top - padding.bottom;
+  const barWidth = Math.max(6, Math.min(30, (chartW / displayData.length) - 4));
+  const barGap = (chartW - barWidth * displayData.length) / (displayData.length + 1);
+
+  // Y-axis grid lines
+  let gridHtml = '';
+  for (let i = 0; i <= 4; i++) {
+    const y = padding.top + chartH * (1 - i / 4);
+    const val = Math.round(maxVal * i / 4);
+    gridHtml += `<line x1="${padding.left}" y1="${y}" x2="${padding.left + chartW}" y2="${y}" stroke="var(--border)" stroke-width="0.5"/>`;
+    gridHtml += `<text x="${padding.left - 6}" y="${y + 4}" text-anchor="end" fill="var(--text-muted)" font-size="10">${val}</text>`;
+  }
+
+  // Bars
+  let barsHtml = '';
+  displayData.forEach((d, i) => {
+    const barH = maxVal > 0 ? (d.value / maxVal) * chartH : 0;
+    const x = padding.left + barGap + i * (barWidth + barGap);
+    const y = padding.top + chartH - barH;
+    const fill = d.isToday ? 'var(--primary)' : 'var(--text-muted)';
+    const rx = Math.min(3, barWidth / 2);
+
+    barsHtml += `<rect class="chart-bar${d.isToday ? ' today' : ''}" x="${x}" y="${y}" width="${barWidth}" height="${Math.max(barH, d.value > 0 ? 2 : 0)}" rx="${rx}" fill="${fill}" data-value="${d.value}" data-label="${d.label}"/>`;
+    if (d.value > 0) {
+      barsHtml += `<text x="${x + barWidth / 2}" y="${y - 6}" text-anchor="middle" fill="var(--text-secondary)" font-size="10" font-weight="600">${d.value}</text>`;
+    }
+    barsHtml += `<text x="${x + barWidth / 2}" y="${padding.top + chartH + 16}" text-anchor="middle" fill="${d.isToday ? 'var(--primary)' : 'var(--text-muted)'}" font-size="10" font-weight="${d.isToday ? '600' : '400'}">${d.label}</text>`;
+  });
+
+  els.chartSvg.innerHTML = gridHtml + barsHtml;
+}
+
+function formatMinutes(mins, prefix) {
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  const tail = h + 'h' + (m > 0 ? ' ' + m + 'm' : '');
+  return prefix ? prefix + ' ' + tail : tail;
+}
+
+function renderSummaryCards() {
+  const stats = getStats();
+  const today = getToday();
+
+  // Total focus time
+  const totalMinutes = stats.total * settings.workDuration;
+  els.statsTotalFocus.textContent = formatMinutes(totalMinutes);
+
+  // Average daily (over the days with data)
+  const datesWithData = Object.keys(stats.history).filter(d => stats.history[d] > 0).length;
+  const avgDaily = datesWithData > 0 ? Math.round(totalMinutes / datesWithData) : 0;
+  els.statsAvgDaily.textContent = formatMinutes(avgDaily, '日均');
+
+  // Best day
+  let bestDate = null, bestCount = 0;
+  for (const [date, count] of Object.entries(stats.history)) {
+    if (count > bestCount) { bestCount = count; bestDate = date; }
+  }
+  if (bestDate) {
+    const d = new Date(bestDate);
+    els.statsBestDay.textContent = (d.getMonth() + 1) + '/' + d.getDate();
+    els.statsBestCount.textContent = bestCount + ' 个番茄';
+  }
+
+  // Streak
+  els.statsStreak.textContent = stats.streak;
+
+  // Week total
+  let weekTotal = 0;
+  for (let i = 0; i < 7; i++) {
+    weekTotal += (stats.history[getDateDaysAgo(i)] || 0);
+  }
+  els.statsWeekTotal.textContent = '本周 ' + weekTotal + ' 个';
+
+  // Task completion rate
+  const totalTasks = tasks.length;
+  const doneTasks = tasks.filter(t => t.done).length;
+  const rate = totalTasks > 0 ? Math.round((doneTasks / totalTasks) * 100) : 0;
+  els.statsCompletion.textContent = rate + '%';
+  els.statsTaskInfo.textContent = doneTasks + '/' + totalTasks + ' 任务';
+}
+
+// ── Timer Core ──
+function getDurationForMode(mode) {
+  if (mode === 'work') return settings.workDuration * 60;
+  if (mode === 'break') return settings.breakDuration * 60;
+  return settings.longBreakDuration * 60;
+}
+
+function switchMode(mode) {
+  currentMode = mode;
+  timeLeft = getDurationForMode(mode);
+  updateDisplay();
+  updateModeTabs();
+  updateRingColor();
+  els.timerLabel.textContent = MODE_LABELS[mode];
+}
+
+function updateModeTabs() {
+  $qsa('.mode-tab').forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.mode === currentMode);
+  });
+}
+
+function updateRingColor() {
+  els.ring.classList.remove('break-mode', 'long-break-mode');
+  if (currentMode === 'break') els.ring.classList.add('break-mode');
+  if (currentMode === 'long-break') els.ring.classList.add('long-break-mode');
+}
+
+function formatTime(seconds) {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+}
+
+function updateDisplay() {
+  els.timerDisplay.textContent = formatTime(timeLeft);
+  const dur = getDurationForMode(currentMode);
+  const progress = dur > 0 ? timeLeft / dur : 1;
+  els.ring.style.strokeDashoffset = RING_CIRCUMFERENCE * (1 - progress);
+  updatePageTitle();
+}
+
+function updatePageTitle() {
+  if (isRunning) {
+    document.title = currentMode === 'work'
+      ? `🍅 ${formatTime(timeLeft)} - 专注`
+      : `☕ ${formatTime(timeLeft)} - 休息`;
+  } else {
+    document.title = '🍅 番茄钟';
+  }
+}
+
+function updatePlayButton() {
+  if (isRunning) {
+    els.btnPlay.textContent = '⏸';
+    els.btnPlay.classList.add('running');
+  } else {
+    els.btnPlay.textContent = '▶';
+    els.btnPlay.classList.remove('running');
+  }
+}
+
+function toggleTimer() {
+  if (isRunning) pauseTimer(); else startTimer();
+}
+
+function startTimer() {
+  if (isRunning) return;
+  isRunning = true;
+  els.ring.classList.remove('paused');
+  updatePlayButton();
+  els.timerLabel.textContent = MODE_LABELS_RUNNING[currentMode];
+  updatePageTitle();
+
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateDisplay();
+    if (timeLeft <= 0) timerComplete();
+  }, 1000);
+}
+
+function pauseTimer() {
+  if (!isRunning) return;
+  isRunning = false;
+  clearInterval(timerInterval);
+  timerInterval = null;
+  els.ring.classList.add('paused');
+  updatePlayButton();
+  els.timerLabel.textContent = '已暂停';
+  document.title = '⏸ 已暂停';
+}
+
+function resetTimer() {
+  pauseTimer();
+  timeLeft = getDurationForMode(currentMode);
+  updateDisplay();
+  els.timerLabel.textContent = MODE_LABELS[currentMode];
+  document.title = '🍅 番茄钟';
+}
+
+function skipTimer() {
+  pauseTimer();
+  timerComplete();
+}
+
+function timerComplete() {
+  pauseTimer();
+  playAlarm();
+
+  const wasWork = currentMode === 'work';
+
+  if (wasWork) {
+    completedPomodoros++;
+    recordPomodoro();
+    if (activeTaskId) incrementTaskPomodoro(activeTaskId);
+
+    showOrNotify(`🎉 第 ${completedPomodoros} 个番茄完成！`, false);
+    sendNotification('🍅 番茄钟完成！', `专注 ${settings.workDuration} 分钟完成，该休息一下了~`);
+
+    if (completedPomodoros % settings.longBreakInterval === 0) {
+      switchMode('long-break');
+      showOrNotify('🌴 长休时间！', true);
+    } else {
+      switchMode('break');
+    }
+  } else {
+    showOrNotify('⏰ 休息结束，开始专注吧！', true);
+    sendNotification('⏰ 休息结束', '准备好开始下一个番茄了吗？');
+    switchMode('work');
+  }
+
+  updateDisplay();
+}
+
+function recordPomodoro() {
+  const stats = getStats();
+  const today = getToday();
+  stats.total++;
+  stats.history[today] = (stats.history[today] || 0) + 1;
+
+  const yesterday = getDateDaysAgo(1);
+  if (stats.lastDate === today) {
+    // Already counted today
+  } else if (stats.lastDate === yesterday) {
+    stats.streak++;
+  } else if (stats.lastDate !== today) {
+    stats.streak = 1;
+  }
+  stats.lastDate = today;
+  saveStats(stats);
+  updateMiniStats(stats);
+  if (currentPage === 'stats') renderStats();
+}
+
+function updateMiniStats(stats) {
+  stats = stats || getStats();
+  const today = getToday();
+  els.todayCount.textContent = stats.history[today] || 0;
+  els.totalCount.textContent = stats.total;
+  els.streakCount.textContent = stats.streak;
+}
+
+// ── Theme Management ──
+function applyTheme(theme, skipSave) {
+  settings.theme = theme;
+  document.documentElement.setAttribute('data-theme', theme);
+
+  $qsa('.theme-option').forEach(opt => {
+    opt.classList.toggle('active', opt.dataset.theme === theme);
+  });
+
+  // Re-apply custom color on top of new theme
+  applyCustomColor(settings.customColor, true);
+  if (!skipSave) saveSettings();
+}
+
+function applyCustomColor(color, skipSave) {
+  if (color) {
+    settings.customColor = color;
+    document.documentElement.style.setProperty('--primary', color);
+    document.documentElement.style.setProperty('--primary-glow', hexToRgba(color, 0.35));
+    els.customColor.value = color;
+  } else {
+    settings.customColor = null;
+    document.documentElement.style.removeProperty('--primary');
+    document.documentElement.style.removeProperty('--primary-glow');
+    // Read the theme's native primary color without forcing layout
+    els.customColor.value = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
+  }
+  if (!skipSave) saveSettings();
+}
+
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+// ── Sync Settings to UI ──
+function syncSettingsToInputs() {
+  // Sync numeric settings via data-setting attributes
+  $qsa('[data-setting]').forEach(el => {
+    el.value = settings[el.dataset.setting];
+  });
+
+  $qsa('.theme-option').forEach(opt => {
+    opt.classList.toggle('active', opt.dataset.theme === settings.theme);
+  });
+
+  $qsa('.sound-option').forEach(opt => {
+    opt.classList.toggle('active', opt.dataset.sound === settings.sound);
+  });
+
+  els.customColor.value = settings.customColor || getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
+}
+
+// ── Event Bindings ──
+
+// Timer controls
+els.btnPlay.addEventListener('click', () => { playClick(); toggleTimer(); });
+$id('btnReset').addEventListener('click', () => { playClick(); resetTimer(); });
+$id('btnSkip').addEventListener('click', () => { playClick(); skipTimer(); });
+
+// Mode tabs
+$qsa('.mode-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    playClick();
+    pauseTimer();
+    switchMode(tab.dataset.mode);
+  });
+});
+
+// Task input
+$id('btnAddTask').addEventListener('click', () => {
+  playClick();
+  const title = els.taskInput.value.trim();
+  if (title) {
+    addTask(title);
+    els.taskInput.value = '';
+    els.taskInput.focus();
+  }
+});
+els.taskInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') $id('btnAddTask').click();
+});
+
+// Stats range toggle
+$qsa('.stats-toggle-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    playClick();
+    $qsa('.stats-toggle-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    statsRange = parseInt(btn.dataset.range, 10);
+    renderStats();
+  });
+});
+
+// Theme picker
+$qsa('.theme-option').forEach(opt => {
+  opt.addEventListener('click', () => applyTheme(opt.dataset.theme));
+});
+
+// Sound picker
+$qsa('.sound-option').forEach(opt => {
+  opt.addEventListener('click', () => {
+    playClick();
+    settings.sound = opt.dataset.sound;
+    saveSettings();
+    $qsa('.sound-option').forEach(o => o.classList.remove('active'));
+    opt.classList.add('active');
+    (SOUND_PATTERNS[opt.dataset.sound] || (() => {}))();
+  });
+});
+
+// Custom color
+els.customColor.addEventListener('input', (e) => applyCustomColor(e.target.value));
+$id('btnResetColor').addEventListener('click', () => { playClick(); applyCustomColor(null); });
+
+// Clear data
+$id('btnClearData').addEventListener('click', () => {
+  if (confirm('确定要清除所有数据吗？\n\n这将删除所有番茄记录、任务和设置。此操作不可撤销。')) {
+    localStorage.removeItem(STORAGE_SETTINGS);
+    localStorage.removeItem(STORAGE_TASKS);
+    localStorage.removeItem(STORAGE_STATS);
+    localStorage.removeItem(STORAGE_ACTIVE_TASK);
+    location.reload();
+  }
+});
+
+// Settings inputs — data-driven via data-setting attribute
+$qsa('[data-setting]').forEach(input => {
+  input.addEventListener('change', () => {
+    const key = input.dataset.setting;
+    const val = parseInt(input.value, 10);
+    if (isNaN(val) || val < parseInt(input.min, 10) || val > parseInt(input.max, 10)) {
+      input.value = settings[key];
+      return;
+    }
+    settings[key] = val;
+    saveSettings();
+
+    const modeMap = { workDuration: 'work', breakDuration: 'break', longBreakDuration: 'long-break' };
+    if (modeMap[key] === currentMode) resetTimer();
+  });
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT') return;
+  switch (e.code) {
+    case 'Space':
+      e.preventDefault();
+      toggleTimer();
+      break;
+    case 'KeyR':
+      if (!e.ctrlKey && !e.metaKey) resetTimer();
+      break;
+    case 'Digit1': switchMode('work'); break;
+    case 'Digit2': switchMode('break'); break;
+    case 'Digit3': switchMode('long-break'); break;
+    case 'KeyT':
+      if (!e.ctrlKey && !e.metaKey) navigateTo('tasks');
+      break;
+    case 'KeyS':
+      if (!e.ctrlKey && !e.metaKey) navigateTo('stats');
+      break;
+    case 'Escape':
+      navigateTo('timer');
+      break;
+  }
+});
+
+// ── Initialization ──
+function init() {
+  // Apply theme (skipSave since we're setting up)
+  applyTheme(settings.theme || 'dark', true);
+  if (settings.customColor) {
+    applyCustomColor(settings.customColor, true);
+  }
+  saveSettings(); // Save once after both are applied
+
+  // Sync settings to inputs
+  syncSettingsToInputs();
+
+  // Timer init
+  switchMode('work');
+  updateMiniStats();
+  updateActiveTaskIndicator();
+  updateTaskBadge();
+
+  // Check streak expiry
+  const stats = getStats();
+  const today = getToday();
+  if (stats.lastDate && stats.lastDate !== today) {
+    const last = new Date(stats.lastDate);
+    const todayDate = new Date(today);
+    const diffDays = Math.floor((todayDate - last) / 86400000);
+    if (diffDays > 1) {
+      stats.streak = 0;
+      saveStats(stats);
+      updateMiniStats(stats);
+    }
+  }
+
+  // Request notification permission
+  if (Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Start-Process \"D:\\\\其他\\\\EXPLORE\\\\First-CC\\\\pomodoro-timer.html\")",
+      "PowerShell(Get-Content \"d:\\\\其他\\\\EXPLORE\\\\First-CC\\\\要求文件\" -Raw | ForEach-Object { $_.Length; if \\($_.Length -gt 0\\) { $_ } })",
+      "PowerShell($content = Get-Content \"d:\\\\其他\\\\EXPLORE\\\\First-CC\\\\requirements.md\" -Raw; Write-Host \"Length: $\\($content.Length\\)\"; if \\($content.Length -gt 0\\) { Write-Host \"Content: $content\" } else { Write-Host \"File is empty\" })",
+      "PowerShell(git *)",
+      "PowerShell(if \\(Test-Path \"$env:USERPROFILE\\\\.ssh\\\\id_ed25519.pub\"\\) { Write-Host \"SSH key exists\"; Get-Content \"$env:USERPROFILE\\\\.ssh\\\\id_ed25519.pub\" } elseif \\(Test-Path \"$env:USERPROFILE\\\\.ssh\\\\id_rsa.pub\"\\) { Write-Host \"SSH key exists \\(RSA\\)\"; Get-Content \"$env:USERPROFILE\\\\.ssh\\\\id_rsa.pub\" } else { Write-Host \"No SSH key found\" })",
+      "PowerShell(ssh-keygen *)",
+      "PowerShell(New-Item *)",
+      "PowerShell(ssh -T git@github.com -o StrictHostKeyChecking=accept-new 2>&1)"
+    ]
+  }
+}
