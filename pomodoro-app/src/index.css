@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Frosted Glass Base ── */
+body {
+  background: transparent;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  -webkit-app-region: drag;
+}
+
+/* Allow interaction on buttons/inputs */
+button, input {
+  -webkit-app-region: no-drag;
+}
+
+/* ── Glass surface ── */
+.glass {
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 0.5px solid rgba(255, 255, 255, 0.25);
+}
+
+.dark .glass {
+  background: rgba(30, 30, 35, 0.55);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ── Ring Progress Animation ── */
+.ring-progress {
+  transition: stroke-dashoffset 1s linear;
+}
+
+.ring-progress.paused {
+  transition: none;
+}
+
+/* ── Elastic Button Press ── */
+.btn-press {
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.btn-press:active {
+  transform: scale(0.88);
+}
+
+/* ── Smooth mode switch ── */
+.mode-switch {
+  transition: all 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* ── Prevent text selection ── */
+.no-select {
+  user-select: none;
+  -webkit-user-select: none;
+}

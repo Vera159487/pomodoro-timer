@@ -1,0 +1,13 @@
+# Dependencies
+node_modules/
+
+# Build output
+out/
+dist/
+
+# Claude Code local config
+.claude/
+
+# Unrelated files
+shenzhen-food-photos/
+Claude-Code-入门教材.md
