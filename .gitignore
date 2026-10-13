@@ -7,3 +7,7 @@ dist/
 
 # Claude Code local config
 .claude/
+
+# 求职材料（不公开）
+docs/
+convert_md_to_docx.py
